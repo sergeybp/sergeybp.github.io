@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script src="change_colors.js"></script>
+
+Блокнот для игры Cluedo Grab&Go 2016
+
+<table border="1">
+    <tr>
+        <td>---ГОСТИ---</td>
+    </tr>
+    <tr>
+        <td>Горчичников</td>
+        <td><button id = "1" onclick="cl(id)">+</button></td>
+        <td><button id = "2" onclick="cl(id)">-</button></td>
+        <td><button id = "3" onclick="cl(id)">^</button></td>
+        <td><button id = "4" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Черниченко</td>
+        <td><button id = "5" onclick="cl(id)">+</button></td>
+        <td><button id = "6" onclick="cl(id)">-</button></td>
+        <td><button id = "7" onclick="cl(id)">^</button></td>
+        <td><button id = "8" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Зеленович</td>
+        <td><button id = "9" onclick="cl(id)">+</button></td>
+        <td><button id = "10" onclick="cl(id)">-</button></td>
+        <td><button id = "11" onclick="cl(id)">^</button></td>
+        <td><button id = "12" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Голубева</td>
+        <td><button id = "13" onclick="cl(id)">+</button></td>
+        <td><button id = "14" onclick="cl(id)">-</button></td>
+        <td><button id = "15" onclick="cl(id)">^</button></td>
+        <td><button id = "16" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Краснова</td>
+        <td><button id = "17" onclick="cl(id)">+</button></td>
+        <td><button id = "18" onclick="cl(id)">-</button></td>
+        <td><button id = "19" onclick="cl(id)">^</button></td>
+        <td><button id = "20" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Белых</td>
+        <td><button id = "21" onclick="cl(id)">+</button></td>
+        <td><button id = "22" onclick="cl(id)">-</button></td>
+        <td><button id = "23" onclick="cl(id)">^</button></td>
+        <td><button id = "24" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>---ОРУДИЯ ПРЕСТУПЛЕНИЯ---</td>
+    </tr>
+    <tr>
+        <td>Нож</td>
+        <td><button id = "31" onclick="cl(id)">+</button></td>
+        <td><button id = "32" onclick="cl(id)">-</button></td>
+        <td><button id = "33" onclick="cl(id)">^</button></td>
+        <td><button id = "34" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Подсвечник</td>
+        <td><button id = "35" onclick="cl(id)">+</button></td>
+        <td><button id = "36" onclick="cl(id)">-</button></td>
+        <td><button id = "37" onclick="cl(id)">^</button></td>
+        <td><button id = "38" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Пистолет</td>
+        <td><button id = "39" onclick="cl(id)">+</button></td>
+        <td><button id = "40" onclick="cl(id)">-</button></td>
+        <td><button id = "41" onclick="cl(id)">^</button></td>
+        <td><button id = "42" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Яд</td>
+        <td><button id = "43" onclick="cl(id)">+</button></td>
+        <td><button id = "44" onclick="cl(id)">-</button></td>
+        <td><button id = "45" onclick="cl(id)">^</button></td>
+        <td><button id = "46" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Веревка</td>
+        <td><button id = "47" onclick="cl(id)">+</button></td>
+        <td><button id = "48" onclick="cl(id)">-</button></td>
+        <td><button id = "49" onclick="cl(id)">^</button></td>
+        <td><button id = "50" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Гантеля</td>
+        <td><button id = "51" onclick="cl(id)">+</button></td>
+        <td><button id = "52" onclick="cl(id)">-</button></td>
+        <td><button id = "53" onclick="cl(id)">^</button></td>
+        <td><button id = "54" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>---КОМНАТЫ---</td>
+    </tr>
+    <tr>
+        <td>Холл</td>
+        <td><button id = "61" onclick="cl(id)">+</button></td>
+        <td><button id = "62" onclick="cl(id)">-</button></td>
+        <td><button id = "63" onclick="cl(id)">^</button></td>
+        <td><button id = "64" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Столовая</td>
+        <td><button id = "65" onclick="cl(id)">+</button></td>
+        <td><button id = "66" onclick="cl(id)">-</button></td>
+        <td><button id = "67" onclick="cl(id)">^</button></td>
+        <td><button id = "68" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Кухня</td>
+        <td><button id = "69" onclick="cl(id)">+</button></td>
+        <td><button id = "70" onclick="cl(id)">-</button></td>
+        <td><button id = "71" onclick="cl(id)">^</button></td>
+        <td><button id = "72" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Терасса</td>
+        <td><button id = "73" onclick="cl(id)">+</button></td>
+        <td><button id = "74" onclick="cl(id)">-</button></td>
+        <td><button id = "75" onclick="cl(id)">^</button></td>
+        <td><button id = "76" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Обсерватория</td>
+        <td><button id = "77" onclick="cl(id)">+</button></td>
+        <td><button id = "78" onclick="cl(id)">-</button></td>
+        <td><button id = "79" onclick="cl(id)">^</button></td>
+        <td><button id = "80" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Кинотеатр</td>
+        <td><button id = "81" onclick="cl(id)">+</button></td>
+        <td><button id = "82" onclick="cl(id)">-</button></td>
+        <td><button id = "83" onclick="cl(id)">^</button></td>
+        <td><button id = "84" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Гостиная</td>
+        <td><button id = "85" onclick="cl(id)">+</button></td>
+        <td><button id = "86" onclick="cl(id)">-</button></td>
+        <td><button id = "87" onclick="cl(id)">^</button></td>
+        <td><button id = "88" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Ванная комната</td>
+        <td><button id = "89" onclick="cl(id)">+</button></td>
+        <td><button id = "90" onclick="cl(id)">-</button></td>
+        <td><button id = "91" onclick="cl(id)">^</button></td>
+        <td><button id = "92" onclick="cl(id)">@</button></td>
+    </tr>
+    <tr>
+        <td>Дом для гостей</td>
+        <td><button id = "93" onclick="cl(id)">+</button></td>
+        <td><button id = "94" onclick="cl(id)">-</button></td>
+        <td><button id = "95" onclick="cl(id)">^</button></td>
+        <td><button id = "96" onclick="cl(id)">@</button></td>
+    </tr>
+
+
+</table>
+
+</body>
+</html>
