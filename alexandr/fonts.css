@@ -1,0 +1,7 @@
+@font-face{
+	font-family:'c4fontregular';
+	src: url('/resources/fonts/c4Font.woff') format('woff'),
+	 url('/resources/fonts/c4Font.ttf') format('truetype');
+	font-weight: normal;
+    font-style: normal;
+}

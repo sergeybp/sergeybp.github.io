@@ -1,0 +1,8 @@
+@font-face{
+	font-family:'MyFont';
+	src: url('/resources/fonts/c4Font.eot');
+	src: url('/resources/fonts/c4Font.eot?#iefix') format('embedded-opentype');
+
+	font-weight: 400;
+    font-style: normal;
+}
