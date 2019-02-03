@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ELO</title>
+</head>
+<body>
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyC4iwQ4faPC885nmKOBkpZKJ6VEPs75IcM",
+        authDomain: "elostats-5b95d.firebaseapp.com",
+        databaseURL: "https://elostats-5b95d.firebaseio.com",
+        projectId: "elostats-5b95d",
+        storageBucket: "elostats-5b95d.appspot.com",
+        messagingSenderId: "528242988488"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+
+    function writeData(userId, stat) {
+        firebase.database().ref('users/' + userId).set({
+            username: name,
+            stat: stat
+        });
+    }
+
+    function sleepFor( sleepDuration ){
+        var now = new Date().getTime();
+        while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
+    }
+    function read(userId) {
+        database.ref('/users/' + userId).once('value').then(function (snapshot) {
+            var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+            var x =  (snapshot.val() && snapshot.val().stat) || 0;
+            document.getElementById(userId).textContent = userId+': ' + x;
+        });
+    }
+
+    var I = 'ILIA';
+    var S = 'SERGEI';
+    var A = 'ALEXANDR';
+
+
+    var winner = 'NOT SELECTED';
+    var loser = 'NOT SELECTED';
+
+    function setWinner(w){
+        winner = w;
+        document.getElementById('winId').textContent = 'WINNER: ' + winner;
+    }
+
+    function setLoser(w){
+        loser = w;
+        document.getElementById('loseId').textContent = 'LOSER: ' + loser;
+
+    }
+
+    function commit() {
+
+        database.ref('/users/' + winner).once('value').then(function (snapshot) {
+            var winStat =  (snapshot.val() && snapshot.val().stat) || 0;
+            database.ref('/users/' + loser).once('value').then(function (snapshot) {
+                var loseStat =  (snapshot.val() && snapshot.val().stat) || 0;
+                var wRes = winStat+20*(1-1/(1+Math.pow(10, ((loseStat-winStat)/400))));
+                var lRes = loseStat+20*(0-1/(1+Math.pow(10, ((winStat-loseStat)/400))));
+                writeData(winner, wRes);
+                writeData(loser, lRes);
+                getStats();
+            });
+        });
+
+    }
+
+    function getStats() {
+        read(I);
+        read(S);
+        read(A);
+    }
+
+</script>
+
+<h3>Current statistics:</h3>
+<p id="ILIA">ILIA: NEED GET</p>
+<p id="SERGEI">SERGEI: NEED GET</p>
+<p id="ALEXANDR">ALEXANDR: NEED GET</p>
+<button onclick="getStats();">Get statistics</button>
+<br>
+
+-------------------------------------------
+<h3>Add game results:</h3>
+<p id="winId">
+    WINNER: NOT SELECTED
+</p>
+
+<button onclick="setWinner(I);">ILIA</button>
+<button onclick="setWinner(S);">SERGEI</button>
+<button onclick="setWinner(A);">ALEXANDR</button>
+<br>
+<p id="loseId">
+    LOSER: NOT SELECTED
+</p>
+<button onclick="setLoser(I);">ILIA</button>
+<button onclick="setLoser(S);">SERGEI</button>
+<button onclick="setLoser(A);">ALEXANDR</button>
+<br>
+<br>
+<button onclick="commit();">COMMIT</button>
+
+</body>
+</html>
