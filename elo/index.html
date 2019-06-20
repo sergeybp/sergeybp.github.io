@@ -43,7 +43,8 @@
     var I = 'ILIA';
     var S = 'SERGEI';
     var A = 'ALEXANDR';
-
+    var H = 'SASHA';
+    var T = 'TEST';
 
     var winner = 'NOT SELECTED';
     var loser = 'NOT SELECTED';
@@ -79,6 +80,8 @@
         read(I);
         read(S);
         read(A);
+        read(H);
+        read(T);
     }
 
 </script>
@@ -87,6 +90,8 @@
 <p id="ILIA">ILIA: NEED GET</p>
 <p id="SERGEI">SERGEI: NEED GET</p>
 <p id="ALEXANDR">ALEXANDR: NEED GET</p>
+<p id="SASHA">SASHA: NEED GET</p>
+<p id="TEST">TEST: NEED GET</p>
 <button onclick="getStats();">Get statistics</button>
 <br>
 
@@ -99,6 +104,8 @@
 <button onclick="setWinner(I);">ILIA</button>
 <button onclick="setWinner(S);">SERGEI</button>
 <button onclick="setWinner(A);">ALEXANDR</button>
+<button onclick="setWinner(H);">SASHA</button>
+<button onclick="setWinner(T);">TEST</button>
 <br>
 <p id="loseId">
     LOSER: NOT SELECTED
@@ -106,6 +113,8 @@
 <button onclick="setLoser(I);">ILIA</button>
 <button onclick="setLoser(S);">SERGEI</button>
 <button onclick="setLoser(A);">ALEXANDR</button>
+<button onclick="setLoser(H);">SASHA</button>
+<button onclick="setLoser(T);">TEST</button>
 <br>
 <br>
 <button onclick="commit();">COMMIT</button>
