@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mafia</title>
+</head>
+<body>
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+<script src="admin.js"></script>
+    <h1>MAFIA</h1>
+    <hr>
+    <label for="gameId">Game Id (Numbers Only)</label>
+    <input type="text" id="gameId"><br><br>
+    <label for="gameName">Game Name</label>
+    <input type="text" id="gameName"><br><br>
+    <button onclick="createNewGame();">Create Game</button>
+    <hr>
+    <h2 id="currentGameLabel">No active game for now</h2>
+    <table id="staticTable1"  width="100%" style="border: gray">
+        <tr><td>
+            <br>
+            <label for="mafiaCount">Count of Mafia: </label>
+            <input type="number" id="mafiaCount"><br><br>
+            <label for="maniacCount">Count of Maniac: </label>
+            <input type="number" id="maniacCount"><br><br>
+            <label for="doctorCount">Count of Doctor: </label>
+            <input type="number" id="doctorCount"><br><br>
+        </td><td>
+            <label for="commissarCount">Count of Commissar: </label>
+            <input type="number" id="commissarCount"><br><br>
+            <label for="womanCount">Count of Women: </label>
+            <input type="number" id="womanCount"><br>
+        </td></tr>
+    </table>
+    <hr>
+    <table id="staticTable"  width="100%" style="border: gray">
+        <tr><td>
+            <h3>Users:</h3>
+            <table id="commonTable" border="1"></table><br>
+            <button id="assignRoles" onClick="assignRoles();">Assign Roles and Start</button>
+        </td><td>
+            <div id="gameProcess"></div>
+        </td>
+        </tr>
+    </table>
+
+<br><br>
+<hr>
+<button onclick="clearAll();" style="color:red">Delete All And Restart</button>
+
+</body>
+</html>

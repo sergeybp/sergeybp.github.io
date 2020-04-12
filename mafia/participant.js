@@ -1,0 +1,175 @@
+var config = {
+    apiKey: "AIzaSyC4iwQ4faPC885nmKOBkpZKJ6VEPs75IcM",
+    authDomain: "elostats-5b95d.firebaseapp.com",
+    databaseURL: "https://elostats-5b95d.firebaseio.com",
+    projectId: "elostats-5b95d",
+    storageBucket: "elostats-5b95d.appspot.com",
+    messagingSenderId: "528242988488"
+};
+firebase.initializeApp(config);
+setInterval(function(){mainCycle(); }, 3000);
+window.onload = function exampleFunction() {
+    mainCycle();
+};
+
+function joinGame() {
+    var gameId = document.getElementById('gameId').value;
+    var gameName = '';
+    firebase.database().ref('mafia/games/'+gameId).once('value').then(function(snapshot) {
+        gameName = (snapshot.val() && snapshot.val().gameName) || 'NOT_FOUND';
+        console.log(gameName);
+        if(gameName === "NOT_FOUND") {
+            alert("Game not found!")
+        } else {
+            sessionStorage.setItem("currentGameId", gameId);
+            sessionStorage.setItem("currentGameName", gameName);
+            setCurrentGameName();
+        }
+    });
+
+}
+
+function getActiveGameId() {
+    return sessionStorage.getItem("currentGameId");
+}
+
+function setCurrentGameName() {
+    document.getElementById("currentGameLabel").textContent = "Active game: " +  sessionStorage.getItem("currentGameName");
+    var currentRound = sessionStorage.getItem("currentRound") || "no";
+    if(currentRound !== "no") {
+        document.getElementById("currentRound").textContent = "Current round: "+currentRound;
+    }
+}
+
+function setCurrentGameStatus() {
+    if(sessionStorage.getItem("roleRequested") === "yes" && sessionStorage.getItem("roleAssigned") === "no") {
+        document.getElementById("gameStarting").textContent = "The game starts soon... Please wait."
+        document.getElementById("currentRole").textContent = "";
+    }
+
+    if(sessionStorage.getItem("roleRequested") === "yes" && sessionStorage.getItem("roleAssigned") !== "no") {
+        document.getElementById("gameStarting").textContent = "Game started!";
+        document.getElementById("currentRole").textContent = sessionStorage.getItem("roleAssigned");
+    }
+
+    if(sessionStorage.getItem("killed") === "yes") {
+        document.getElementById("killed").textContent = "YOU WERE KILLED :(";
+    } else {
+        document.getElementById("killed").textContent = "";
+    }
+
+
+}
+
+function clearAll() {
+    sessionStorage.clear();
+    location.reload();
+}
+
+function refreshMyInfo() {
+    var username = sessionStorage.getItem("username");
+    var gameId = getActiveGameId();
+    if(username === '' || gameId === '') {
+    } else {
+        firebase.database().ref('mafia/games/'+gameId+'/users/'+username).once('value').then(function(snapshot) {
+            var role = (snapshot.val() && snapshot.val().role) || 'no';
+            var killed = (snapshot.val() && snapshot.val().killed) || 'no';
+            sessionStorage.setItem("roleAssigned", role);
+            sessionStorage.setItem("killed", killed);
+            setCurrentGameStatus();
+        });
+    }
+}
+
+
+function requestRole() {
+    var username = document.getElementById("username").value;
+    var gameId = getActiveGameId();
+    if(username === '' || gameId === '') {
+        alert("Please join game and enter name first!")
+    } else {
+        firebase.database().ref('mafia/games/' + getActiveGameId() + '/users').child(username).set({
+            username: username,
+            role: "no",
+            killed: "no"
+        });
+        sessionStorage.setItem("username", username);
+        sessionStorage.setItem("roleRequested", "yes");
+        sessionStorage.setItem("roleAssigned", "no");
+        setCurrentGameStatus();
+    }
+}
+
+function getActiveRequests() {
+    var usersArray;
+    var x = sessionStorage.getItem("users");
+    if(x === null){
+        usersArray = [];
+    } else {
+        usersArray = x.split("|");
+    }
+    console.log(usersArray);
+
+    firebase.database().ref('mafia/games/'+getActiveGameId()).once('value', function(snapshot) {
+        var round = snapshot.val().currentRound || "no";
+        sessionStorage.setItem("currentRound", round);
+    });
+
+    var i = 0;
+    firebase.database().ref('mafia/games/'+getActiveGameId()+'/users').once('value', function(snapshot) {
+        var users = '';
+        snapshot.forEach(function(childSnapshot) {
+            var cur = childSnapshot.val().username;
+            if(!usersArray.includes(cur)) {
+                appendLine(cur, childSnapshot.val().role, childSnapshot.val().killed, i);
+            } else {
+                reDrawLine(cur, childSnapshot.val().role, childSnapshot.val().killed, i);
+            }
+            users = users+'|'+cur;
+            i++;
+        });
+        users = users.substr(1);
+        if(users !== "") {
+            sessionStorage.setItem("users", users);
+        }
+
+    });
+}
+
+function buildString(name, role, killed) {
+    var meKilled = sessionStorage.getItem("killed") === "yes";
+    var sBuilder = name;
+    if(role !== "no" && meKilled) {
+        sBuilder += " - " + role;
+    }
+    if(killed === "yes") {
+        sBuilder += " - " + "KILLED";
+    }
+    return sBuilder;
+}
+
+function appendLine(name, role, killed, ind) {
+    var table = document.getElementById("commonTable");
+    var row = table.insertRow(ind);
+    var cellName = row.insertCell(0);
+    cellName.innerHTML = buildString(name, role, killed);
+    cellName.id = name + "-cell";
+}
+
+function reDrawLine(name, role, killed, ind) {
+    console.log("redraw " + name);
+    var x = document.getElementById(name + "-cell");
+    if(x == null) {
+        appendLine(name, role, killed, ind);
+    } else {
+        x.innerHTML = buildString(name, role, killed);
+    }
+}
+
+function mainCycle() {
+    setCurrentGameName();
+    refreshMyInfo();
+    setCurrentGameStatus();
+    getActiveRequests();
+    console.log("Background is running")
+}
