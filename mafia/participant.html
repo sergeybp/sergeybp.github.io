@@ -5,27 +5,30 @@
     <title>Mafia</title>
 </head>
 <body>
+
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script src="participant.js"></script>
     <h1>MAFIA</h1>
     <hr>
-    <label for="gameId">Game ID: </label>
+    <!--<label for="gameId">Game ID: </label>
     <input type="text" id="gameId"><br><br>
     <button onclick="joinGame();">Join Game</button>
-    <hr>
+    <hr>-->
+    <div id="joinGameDiv">
+        <label for="username">Your name (one word in eng): </label>
+        <input type="text" id="username"><br><br>
+        <button onclick="requestRole();">Request Role</button>
+        <hr>
+    </div>
     <h2 id="currentGameLabel">No active game for now</h2>
-    <label for="username">Your name (one word in eng): </label>
-    <input type="text" id="username"><br><br>
-    <button onclick="requestRole();">Request Role</button>
-    <hr>
     <h2 id="gameStarting"></h2>
     <h1 id="currentRole" style="color:blue"></h1>
     <h1 id="killed" style="color:red"></h1>
         <h3 id="currentRound"></h3>
     <table id="commonTable" border="1"></table>
     <br>
-    <hr>
-    <button onclick="clearAll();" style="color:red">Delete All And Restart</button>
+    <!--<hr>
+    <button onclick="clearAll();" style="color:red">Delete All And Restart</button>-->
 
 </body>
 </html>

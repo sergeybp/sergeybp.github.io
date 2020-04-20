@@ -32,13 +32,13 @@ function commonClear() {
     firebase.database().ref('mafia/games').child(getActiveGameId()).update({
         currentRound: currentRound + 1
     });
+    var roles = getCurrentRoles();
     sessionStorage.setItem("currentRound", currentRound + 1);
     var users = sessionStorage.getItem("users").split("|");
     for(var i = 0; i < users.length; i++) {
-        sessionStorage.removeItem(users[i] + "-" + 1 + "color");
-        sessionStorage.removeItem(users[i] + "-" + 2 + "color");
-        sessionStorage.removeItem(users[i] + "-" + 3 + "color");
-        sessionStorage.removeItem(users[i] + "-" + 4 + "color");
+        for(k = 0; k < roles.length; k++) {
+            sessionStorage.removeItem(users[i] + "-" + k + "color");
+        }
     }
 
 }
@@ -49,12 +49,11 @@ function genCurrentGame() {
     if(gameStarted()) {
         var sBuilder = "Current round: " + currentRound + "<br>";
         sBuilder += "<button onclick=\"commonClear();\" style=\"background-color:darkgreen;color:white\">Falling asleep</button><br>";
+        var roles = getCurrentRoles();
         sBuilder += "Don't forget: <br>";
-        sBuilder += "The mafia wakes up <br>";
-        sBuilder += "The commissar wakes up <br>";
-        sBuilder += "The woman wakes up <br>";
-        sBuilder += "The maniac wakes up <br>";
-        sBuilder += "The doctor wakes up <br>";
+        roles.forEach(p => {
+            sBuilder += p.name +" wakes up <br>";
+        });
         return sBuilder;
     } else {
         return "";
@@ -62,7 +61,7 @@ function genCurrentGame() {
 }
 
 function setCurrentGameName() {
-    document.getElementById("currentGameLabel").textContent = "Active game: " +  sessionStorage.getItem("currentGameName") + ' ('+getActiveGameId()+')';
+    document.getElementById("currentGameLabel").textContent = 'http://sergeybp.github.io/mafia/participant.html?game='+getActiveGameId();
     if((sessionStorage.getItem("gameStarted") || "no") === "yes") {
         document.getElementById("assignRoles").style.visibility = "hidden";
         document.getElementById("gameProcess").innerHTML = genCurrentGame();
@@ -131,6 +130,9 @@ function getColorByInd(ind) {
         case 4:
             res = "red";
             break;
+        case 5:
+            res = "green";
+            break;
         default:
             res = "orange";
             break;
@@ -153,16 +155,53 @@ function commonChange(name, ind) {
 
 function gameStarted() {
     return (sessionStorage.getItem("gameStarted") || "no") === "yes";
+}
 
+class Role {
+    constructor(name, count) {
+        this.name = name;
+        this.count = count;
+    }
+}
+
+function getCurrentRoles() {
+    var currentRoles = (sessionStorage.getItem("roles") || "").substring(1).split("|");
+    var roles = [];
+    for(i = 0; i < currentRoles.length; i++) {
+        var tmp = currentRoles[i].split("&");
+        roles.push(new Role(tmp[0], tmp[1]));
+    }
+    return roles;
+}
+
+function getRolesString() {
+    var roles = getCurrentRoles();
+    var s = "";
+    roles.forEach(p => {
+        s += p.name + "("+p.count+"); "
+    });
+    console.log(s);
+    return s;
+}
+
+function addRole() {
+    var currentRoles = (sessionStorage.getItem("roles") || "");
+    currentRoles += "|" + document.getElementById("roleName").value + "&" + document.getElementById("roleCount").value;
+    sessionStorage.setItem("roles", currentRoles);
+    document.getElementById("roleName").value = "";
+    document.getElementById("roleCount").value = "";
+    document.getElementById("roles").textContent = getRolesString();
 }
 
 function drawButtons(name) {
     if(gameStarted()) {
         var sBuilder = "";
-        sBuilder += "<button onclick=\"commonChange(\'" + name + "\',1);\" style=\"background-color:" + getColor(name, 1) + ";color:white\">DOC</button>";
-        sBuilder += "<button onclick=\"commonChange(\'" + name + "\',2);\" style=\"background-color:" + getColor(name, 2) + ";color:white\">MAN</button>";
-        sBuilder += "<button onclick=\"commonChange(\'" + name + "\',3);\" style=\"background-color:" + getColor(name, 3) + ";color:white\">WOM</button>";
-        sBuilder += "<button onclick=\"commonChange(\'" + name + "\',4);\" style=\"background-color:" + getColor(name, 4) + ";color:white\">MAF</button>";
+        var roles = getCurrentRoles();
+        var k = 0;
+        roles.forEach(p => {
+            sBuilder += "<button onclick=\"commonChange(\'" + name + "\',"+k+");\" style=\"background-color:" + getColor(name, k) + ";color:white\">"+p.name.substring(0,3)+"</button>";
+            k++;
+        });
         return sBuilder;
     } else {
         return "";
@@ -235,30 +274,14 @@ function assignRoles() {
 
     var users = shuffle(sessionStorage.getItem("users").split("|"));
     var usersCount = users.length;
-    var mafiaCount = parseInt(document.getElementById("mafiaCount").value) || 0;
-    var commissarCount = parseInt(document.getElementById("commissarCount").value) || 0;
-    var doctorCount = parseInt(document.getElementById("doctorCount").value) || 0;
-    var maniacCount = parseInt(document.getElementById("maniacCount").value) || 0;
-    var womenCount = parseInt(document.getElementById("womanCount").value) || 0;
+    var roles = getCurrentRoles();
     var i = 0;
-    for(i = 0; i < mafiaCount; i++){
-        setRole(users[i], "MAFIA");
-    }
-    for(i = mafiaCount; i < mafiaCount + commissarCount; i++){
-        setRole(users[i], "COMMISSAR");
-    }
-    for(i = mafiaCount + commissarCount; i < mafiaCount + commissarCount + doctorCount; i++){
-        setRole(users[i], "DOCTOR");
-    }
-    for(i = mafiaCount + commissarCount + doctorCount; i < mafiaCount + commissarCount + doctorCount + maniacCount; i++){
-        setRole(users[i], "MANIAC");
-    }
-    for(i = mafiaCount + commissarCount + doctorCount + maniacCount; i < mafiaCount + commissarCount + doctorCount + maniacCount + womenCount; i++){
-        setRole(users[i], "WOMAN");
-    }
-    for(i = mafiaCount + commissarCount + doctorCount + maniacCount + womenCount; i < usersCount; i++){
-        setRole(users[i], "CIVILIAN");
-    }
+    roles.forEach(role => {
+       for(k = 0; k < parseInt(role.count) || 0; k++){
+           setRole(users[i], role.name);
+           i++;
+       }
+    });
     sessionStorage.setItem("gameStarted", "yes");
 }
 
