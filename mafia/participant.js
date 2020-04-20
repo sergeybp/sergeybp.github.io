@@ -17,7 +17,6 @@ function joinGame(gameId) {
     var gameName = '';
     firebase.database().ref('mafia/games/'+gameId).once('value').then(function(snapshot) {
         gameName = (snapshot.val() && snapshot.val().gameName) || 'NOT_FOUND';
-        console.log(gameName);
         if(gameName === "NOT_FOUND") {
             //alert("Game not found!")
         } else {
@@ -41,29 +40,29 @@ function gameExists() {
 function setCurrentGameName() {
 
     if(sessionStorage.getItem("roleRequested") === "yes") {
-        document.getElementById("joinGameDiv").innerHTML = "Your name: " + sessionStorage.getItem("username").substring(4);
+        document.getElementById("joinGameDiv").innerHTML = "Ваше имя в игре: " + sessionStorage.getItem("username").substring(4);
     }
 
-    document.getElementById("currentGameLabel").textContent = "Active game: " +  sessionStorage.getItem("currentGameName");
+    document.getElementById("currentGameLabel").textContent = "Текущая игра: " +  sessionStorage.getItem("currentGameName");
     var currentRound = sessionStorage.getItem("currentRound") || "no";
     if(currentRound !== "no") {
-        document.getElementById("currentRound").textContent = "Current round: "+currentRound;
+        document.getElementById("currentRound").textContent = "Текущий раунд: "+currentRound;
     }
 }
 
 function setCurrentGameStatus() {
     if(sessionStorage.getItem("roleRequested") === "yes" && sessionStorage.getItem("roleAssigned") === "no") {
-        document.getElementById("gameStarting").textContent = "The game starts soon... Please wait."
+        document.getElementById("gameStarting").textContent = "Игра скоро начнется... Пожалуйста, подождите";
         document.getElementById("currentRole").textContent = "";
     }
 
     if(sessionStorage.getItem("roleRequested") === "yes" && sessionStorage.getItem("roleAssigned") !== "no") {
-        document.getElementById("gameStarting").textContent = "Game started!";
+        document.getElementById("gameStarting").textContent = "Игра началась!";
         document.getElementById("currentRole").textContent = sessionStorage.getItem("roleAssigned");
     }
 
     if(sessionStorage.getItem("killed") === "yes") {
-        document.getElementById("killed").textContent = "YOU WERE KILLED :(";
+        document.getElementById("killed").textContent = "ВЫ БЫЛИ УБИТЫ :(";
     } else {
         document.getElementById("killed").textContent = "";
     }
@@ -127,7 +126,6 @@ function getActiveRequests() {
     } else {
         usersArray = x.split("|");
     }
-    console.log(usersArray);
 
     firebase.database().ref('mafia/games/'+getActiveGameId()).once('value', function(snapshot) {
         var round = snapshot.val().currentRound || "no";
@@ -162,7 +160,7 @@ function buildString(name, role, killed) {
         sBuilder += " - " + role;
     }
     if(killed === "yes") {
-        sBuilder += " - " + "KILLED";
+        sBuilder += " - " + "УБИТ";
     }
     return sBuilder;
 }
@@ -176,7 +174,6 @@ function appendLine(name, role, killed, ind) {
 }
 
 function reDrawLine(name, role, killed, ind) {
-    console.log("redraw " + name);
     var x = document.getElementById(name + "-cell");
     if(x == null) {
         appendLine(name, role, killed, ind);
@@ -211,8 +208,10 @@ function mainCycle() {
         refreshMyInfo();
         setCurrentGameStatus();
         getActiveRequests();
-        console.log("Background is running")
     } else {
+        if(getActiveGameId !== null) {
+            sessionStorage.clear();
+        }
         document.getElementById("joinGameDiv").isContentEditable = false;
         var gameFromUrl = getUrlParam("game", "none");
         if(gameFromUrl !== "none") {
