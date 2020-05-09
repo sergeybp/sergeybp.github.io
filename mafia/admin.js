@@ -272,6 +272,8 @@ function setRole(user, role) {
 
 function assignRoles() {
 
+    var defaultRole = document.getElementById("defaultRole").value;
+
     var users = shuffle(sessionStorage.getItem("users").split("|"));
     var usersCount = users.length;
     var roles = getCurrentRoles();
@@ -282,6 +284,9 @@ function assignRoles() {
            i++;
        }
     });
+    for(k = i; k < usersCount; k++) {
+        setRole(users[k], defaultRole);
+    }
     sessionStorage.setItem("gameStarted", "yes");
 }
 
