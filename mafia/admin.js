@@ -1,12 +1,4 @@
-var config = {
-    apiKey: "AIzaSyC4iwQ4faPC885nmKOBkpZKJ6VEPs75IcM",
-    authDomain: "elostats-5b95d.firebaseapp.com",
-    databaseURL: "https://elostats-5b95d.firebaseio.com",
-    projectId: "elostats-5b95d",
-    storageBucket: "elostats-5b95d.appspot.com",
-    messagingSenderId: "528242988488"
-};
-firebase.initializeApp(config);
+var config = {};
 setInterval(function(){mainCycle(); }, 3000);
 window.onload = function exampleFunction() {
     mainCycle();
@@ -14,6 +6,17 @@ window.onload = function exampleFunction() {
 
 function createNewGame() {
     var gameId = document.getElementById('gameId').value;
+    var configString = atob(document.getElementById('apiKey').value);
+    var preConf = configString.split('&');
+    config = {
+        apiKey: preConf[0],
+        authDomain: preConf[1],
+        databaseURL: preConf[2],
+        projectId: preConf[3],
+        storageBucket: preConf[4],
+        messagingSenderId: preConf[5]
+    };
+    firebase.initializeApp(config);
     firebase.database().ref('mafia/games').child(gameId).set({
         gameId: gameId,
         gameName: document.getElementById('gameName').value
@@ -61,7 +64,7 @@ function genCurrentGame() {
 }
 
 function setCurrentGameName() {
-    document.getElementById("currentGameLabel").textContent = 'http://sergeybp.github.io/mafia/participant.html?game='+getActiveGameId();
+    document.getElementById("currentGameLabel").textContent = 'http://sergeybp.github.io/mafia/participant.html?game='+getActiveGameId()+'&magic='+document.getElementById('apiKey').value;
     if((sessionStorage.getItem("gameStarted") || "no") === "yes") {
         document.getElementById("assignRoles").style.visibility = "hidden";
         document.getElementById("gameProcess").innerHTML = genCurrentGame();
