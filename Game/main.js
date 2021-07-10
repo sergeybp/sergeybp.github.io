@@ -18,7 +18,7 @@ var score = 0;
 var scoreText;
 var bulletTime = 0;
 var bullet;
-var names = ['mary', 'niki', 'valery', 'serj', 'jenya'];
+var names = ['mary', 'niki', 'valery', 'serj', 'jenya', 'ilya'];
 var chooseText;
 
 
@@ -30,6 +30,7 @@ function preload() {
     game.load.image('valery', 'assets/v1.jpg');
     game.load.image('serj', 'assets/s1.jpg');
     game.load.image('jenya', 'assets/j1.jpg');
+	game.load.image('jenya', 'assets/i1.jpg');
     game.load.image('background', 'assets/back.jpg');
 
 }

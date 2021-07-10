@@ -18,7 +18,7 @@ var score = 0;
 var scoreText;
 var bulletTime = 0;
 var bullet;
-var names = ['mary', 'niki', 'valery', 'serj', 'jenya'];
+var names = ['mary', 'niki', 'valery', 'serj', 'jenya', 'ilya'];
 var chooseText;
 
 
@@ -30,6 +30,7 @@ function preload() {
     game.load.image('valery', 'assets/v1.jpg');
     game.load.image('serj', 'assets/s1.jpg');
     game.load.image('jenya', 'assets/j1.jpg');
+	game.load.image('ilya', 'assets/i1.jpg');
     game.load.image('background', 'assets/back.jpg');
 
 }
@@ -115,8 +116,8 @@ function update() {
         if(skipper%10 === 0) {
             if (cursors.down.isDown) {
                 chooser++;
-                if (chooser > 4) {
-                    chooser = 4;
+                if (chooser > 5) {
+                    chooser = 5;
                 }
                 chooseText.text = 'Play as: ' + names[chooser];
             }
@@ -275,6 +276,7 @@ function killhim() {
     je = 0;
     va = 0;
     se = 0;
+	il = 0;
     killemup();
 
 }
