@@ -1,8 +1,8 @@
 c = document.getElementById("canvas");
 ctx = c.getContext("2d");
 const MAX_D = 20
-w = 400
-h = 400
+w = 600
+h = 600
 
 sw = w/MAX_D
 sh = h/MAX_D
@@ -14,6 +14,23 @@ function drawSq(i, j, e) {
     let ww = sw/10
     let hh = sh/10
     ctx.fillRect(x+ww, y+hh, sw-ww, sh-hh)
+}
+
+function setSpeed(x) {
+    if(x === 1) {
+        sessionStorage.setItem('speedA', '140')
+        sessionStorage.setItem('speedB', '4000')
+    } else if(x === 3) {
+        sessionStorage.setItem('speedA', '10')
+        sessionStorage.setItem('speedB', '400')
+    } else {
+        sessionStorage.setItem('speedA', '70')
+        sessionStorage.setItem('speedB', '2000')
+    }
+
+
+
+    destroyGame()
 }
 
 function drawFood(i, j) {
@@ -254,14 +271,17 @@ function findWay(ssx, ssy, psx, psy) {
 
 }
 
+csA = sessionStorage.getItem('speedA') === null ? 70 : parseInt(sessionStorage.getItem('speedA'))
+csB = sessionStorage.getItem('speedB') === null ? 2000 : parseInt(sessionStorage.getItem('speedB'))
+
 const interval = setInterval(function() {
     go()
-}, 70);
+}, csA);
 
 
 const foodCreation = setInterval(function() {
     createFood()
-}, 2000);
+}, csB);
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
