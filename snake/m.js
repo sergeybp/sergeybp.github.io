@@ -74,6 +74,8 @@ function foodExists() {
 }
 
 function destroyGame() {
+    clearInterval(interval)
+    clearInterval(foodCreation)
     window.location.reload()
 }
 
@@ -108,7 +110,10 @@ function moveHead() {
         curPathToFood.reverse()
         curPathToFood.shift()
         skipRecalc = true
-        if(curPathToFood.length === 0) destroyGame()
+        if(curPathToFood.length === 0) {
+            destroyGame()
+            return 0
+        }
     }
 
     if(
@@ -147,7 +152,10 @@ function moveHead() {
         headY >= board.length ||
         board[headX][headY] === 1 ||
         board[headX][headY] === 3
-    ) destroyGame()
+    ) {
+        destroyGame()
+        return 0
+    }
 
 
     if(board[headX][headY] === 2) {
@@ -278,37 +286,32 @@ function getRandomInt(max) {
 };*/
 
 function findEmpty(sx, sy) {
-    if(
-        sx < 0 ||
-        sx >= board.length ||
-        sy < 0 ||
-        sy >= board.length
-    ) return null
-    else if(
-        board[sx][sy] !== 1
-    ) return [sx, sy]
-    else {
-        let t = findEmpty(sx-1,sy)
-        if(t !== null) return t
-        else {
-            t = findEmpty(sx+1,sy)
-            if(t !== null) return t
-            else {
-                t = findEmpty(sx, sy-1)
-                if(t !== null) return t
-                else {
-                    return findEmpty(sx, sy+1)
-                }
-            }
-        }
+
+    for(let i = 0; i < 50; i++) {
+        let ux = getRandomInt(MAX_D)
+        let uy = getRandomInt(MAX_D)
+        if(
+            !(ux < 0 ||
+            ux >= board.length ||
+            uy < 0 ||
+            uy >= board.length) &&
+            board[ux][uy] !== 1 &&
+            board[ux][uy] !== 3
+        ) return [ux, uy]
     }
+    return null
+
+
 }
 
 function createFood() {
     let tx = getRandomInt(MAX_D-2)+1
     let ty = getRandomInt(MAX_D-2)+1
     let r = findEmpty(tx, ty)
-    if(r === null) destroyGame()
+    if(r === null) {
+        destroyGame()
+        return 0
+    }
     else {
         for(let i =0;i<board.length;i++)
             for(let j =0;j<board.length;j++)
