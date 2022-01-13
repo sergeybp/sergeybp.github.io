@@ -81,16 +81,40 @@ lastFoodX = 0
 lastFoodY = 0
 function moveHead() {
     let food = foodExists()
-    let skipRecalc = false
-    if(
-        food.length > 0 &&
+    let skipRecalc = food.length > 0 &&
         food[0] === lastFoodX &&
         food[1] === lastFoodY &&
         curPathToFood.length > 0
+
+    if(food.length === 0) {
+        curPathToFood = []
+        if(curPathToGo.length === 0 ) {
+            boardCopy = Array(MAX_D).fill(null).map(() => Array(MAX_D).fill(0))
+            let ux = getRandomInt(MAX_D)
+            let uy = getRandomInt(MAX_D)
+            let tt = findEmpty(ux, uy)
+            let t = findWay(headX, headY, tt[0], tt[1])
+            curPathToGo = t
+            curPathToGo.reverse()
+            curPathToGo.shift()
+        }
+    } else if(!skipRecalc && (curPathToFood.length === 0 || !(lastFoodX === food[0] && lastFoodY === food[1]))) {
+        curPathToGo = []
+        boardCopy = Array(MAX_D).fill(null).map(() => Array(MAX_D).fill(0))
+        lastFoodX = food[0]
+        lastFoodY = food[1]
+        let t = findWay(headX, headY, 0, 0)
+        curPathToFood = t
+        curPathToFood.reverse()
+        curPathToFood.shift()
+        if(curPathToFood.length === 0) destroyGame()
+    }
+
+    if(
+        skipRecalc
     ) {
         let move = curPathToFood[0]
         curPathToFood.shift()
-        skipRecalc = true
         if(move[0] > headX) changeDir(0)
         else if(move[0] < headX) changeDir(2)
         else if(move[1] > headY) changeDir(1)
@@ -122,32 +146,6 @@ function moveHead() {
         headY >= board.length ||
         board[headX][headY] === 1
     ) destroyGame()
-
-    if(food.length === 0) {
-        curPathToFood = []
-        if(curPathToGo.length === 0 ) {
-            boardCopy = Array(MAX_D).fill(null).map(() => Array(MAX_D).fill(0))
-            let ux = getRandomInt(MAX_D)
-            let uy = getRandomInt(MAX_D)
-            let tt = findEmpty(ux, uy)
-            let t = findWay(headX, headY, tt[0], tt[1])
-            curPathToGo = t
-            curPathToGo.reverse()
-            curPathToGo.shift()
-        }
-    } else if(!skipRecalc && (curPathToFood.length === 0 || !(lastFoodX === food[0] && lastFoodY === food[1]))) {
-        curPathToGo = []
-        boardCopy = Array(MAX_D).fill(null).map(() => Array(MAX_D).fill(0))
-        lastFoodX = food[0]
-        lastFoodY = food[1]
-        let t = findWay(headX, headY, 0, 0)
-        curPathToFood = t
-        curPathToFood.reverse()
-        curPathToFood.shift()
-        if(curPathToFood.length === 0) destroyGame()
-    }
-
-
 
 
     if(board[headX][headY] === 2) {
