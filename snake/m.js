@@ -103,10 +103,11 @@ function moveHead() {
         boardCopy = Array(MAX_D).fill(null).map(() => Array(MAX_D).fill(0))
         lastFoodX = food[0]
         lastFoodY = food[1]
-        let t = findWay(headX, headY, 0, 0)
+        let t = findWay(headX, headY, -1, -1)
         curPathToFood = t
         curPathToFood.reverse()
         curPathToFood.shift()
+        skipRecalc = true
         if(curPathToFood.length === 0) destroyGame()
     }
 
@@ -144,7 +145,8 @@ function moveHead() {
         headX >= board.length ||
         headY < 0 ||
         headY >= board.length ||
-        board[headX][headY] === 1
+        board[headX][headY] === 1 ||
+        board[headX][headY] === 3
     ) destroyGame()
 
 
@@ -192,35 +194,37 @@ function go() {
     }
 }
 
-function colorise(sx, sy, d) {
+function colorise(sx, sy, d, frun) {
     if (
+        !frun && (
         sx < 0 ||
         sx >= board.length ||
         sy < 0 ||
         sy >= board.length ||
         board[sx][sy] === 1 ||
         board[sx][sy] === 3 ||
-        (boardCopy[sx][sy] !== 0 && boardCopy[sx][sy] <= d)
+        (boardCopy[sx][sy] !== 0 && boardCopy[sx][sy] <= d))
     ) return 0
     else {
         boardCopy[sx][sy] = d
-        colorise(sx+1, sy, d+1)
-        colorise(sx-1, sy, d+1)
-        colorise(sx, sy+1, d+1)
-        colorise(sx, sy-1, d+1)
+        colorise(sx+1, sy, d+1, false)
+        colorise(sx-1, sy, d+1, false)
+        colorise(sx, sy+1, d+1, false)
+        colorise(sx, sy-1, d+1, false)
         return 0
     }
 }
 
 function findWay(ssx, ssy, psx, psy) {
-    colorise(ssx, ssy, 1)
-    let realx = psx === 0?lastFoodX:psx
-    let realy = psy === 0?lastFoodY:psy
+    colorise(ssx, ssy, 1, true)
+    let realx = psx === -1?lastFoodX:psx
+    let realy = psy === -1?lastFoodY:psy
     if(boardCopy[realx][realy] === 0) return []
     else {
         let sx = realx
         let sy = realy
         let res = [[sx, sy]]
+        //board[sx][sy] = 0
         while (!(sx === ssx && sy === ssy)) {
             let v = boardCopy[sx][sy]
             if(sx - 1 >= 0 && boardCopy[sx-1][sy] === v - 1) {
@@ -244,7 +248,7 @@ function findWay(ssx, ssy, psx, psy) {
 
 const interval = setInterval(function() {
     go()
-}, 50);
+}, 70);
 
 
 const foodCreation = setInterval(function() {
