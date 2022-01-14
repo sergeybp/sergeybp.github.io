@@ -1,6 +1,7 @@
 c = document.getElementById("canvas");
 ctx = c.getContext("2d");
-const MAX_D = 20
+
+MAX_D = sessionStorage.getItem('max_d') === null ? 20 : parseInt(sessionStorage.getItem('max_d'))
 w = 600
 h = 600
 
@@ -17,19 +18,17 @@ function drawSq(i, j, e) {
 }
 
 function setSpeed(x) {
-    if(x === 1) {
-        sessionStorage.setItem('speedA', '140')
-        sessionStorage.setItem('speedB', '4000')
-    } else if(x === 3) {
-        sessionStorage.setItem('speedA', '10')
-        sessionStorage.setItem('speedB', '400')
-    } else {
-        sessionStorage.setItem('speedA', '70')
-        sessionStorage.setItem('speedB', '2000')
-    }
+    sessionStorage.setItem('speedA', ''+x)
+    destroyGame()
+}
 
+function setD(x){
+    sessionStorage.setItem('max_d', ''+x)
+    destroyGame()
+}
 
-
+function setFoodSpeed(x){
+    sessionStorage.setItem('speedB', ''+x)
     destroyGame()
 }
 

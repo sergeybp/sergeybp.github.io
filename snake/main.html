@@ -5,9 +5,26 @@
     <title>Title</title>
 </head>
 <body>
-<button onclick="setSpeed(1)">SLOW</button>
-<button onclick="setSpeed(2)">NORMAL</button>
-<button onclick="setSpeed(3)">FAST</button><br>
+<div style="display: inline-flex">
+<p>Snake speed:</p>
+<button onclick="setSpeed(140)">140ms</button>
+<button onclick="setSpeed(70)">70ms</button>
+<button onclick="setSpeed(10)">10ms</button><br>
+</div>
+<div style="display: inline-flex">
+<p>Field size:</p>
+<button onclick="setD(10)">10x10</button>
+<button onclick="setD(20)">20x20</button>
+<button onclick="setD(40)">40x40</button><br>
+</div>
+<div style="display: inline-flex">
+    <p>Food time:</p>
+    <button onclick="setFoodSpeed(400)">0.4s</button>
+    <button onclick="setFoodSpeed(1000)">1s</button>
+    <button onclick="setFoodSpeed(2000)">2s</button>
+    <button onclick="setFoodSpeed(4000)">4s</button><br>
+</div>
+<br>
 <canvas id="canvas" style="position: absolute;" width="600" height="600">
     Update your browser
 </canvas>
