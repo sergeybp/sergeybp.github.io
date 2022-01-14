@@ -32,6 +32,11 @@ function setFoodSpeed(x){
     destroyGame()
 }
 
+function resetAll() {
+    sessionStorage.clear()
+    destroyGame()
+}
+
 function drawFood(i, j) {
     let x = i * sw
     let y = j * sh
